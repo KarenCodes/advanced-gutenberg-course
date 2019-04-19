@@ -60,19 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 167);
+/******/ 	return __webpack_require__(__webpack_require__.s = 215);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 167:
+/***/ 215:
 /***/ (function(module, exports) {
 
-/**
- * Import example blocks with frontend code
- */
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/karen/Local Sites/advanced-gutenberg/app/public/wp-content/plugins/advanced-gutenberg-course/filters/index.js'");
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=blocks.frontend.js.map
+//# sourceMappingURL=blocks.filters.js.map
