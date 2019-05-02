@@ -20,7 +20,7 @@ function register_block_assets() {
 		[ 'wp-plugins', 'wp-element', 'wp-edit-post', 'wp-i18n', 'wp-api-request', 'wp-data', 'wp-components', 'wp-blocks', 'wp-editor', 'wp-compose' ],
 		filemtime( _get_plugin_directory() . $editor_js_path ),
 		true
-	);	
+	);
 
 	// Register editor only styles
 	wp_register_style(
@@ -29,7 +29,7 @@ function register_block_assets() {
 		[],
 		filemtime( _get_plugin_directory() . $editor_style_path )
 	);
-	
+
 	// Register shared editor and frontend styles
 	wp_register_style(
 		'jsforwp-adv-gb-css',
@@ -37,6 +37,21 @@ function register_block_assets() {
 		[],
 		filemtime( _get_plugin_directory() . $style_path )
 	);
-
 }
 
+
+add_action("wp_enqueue_scripts", __NAMESPACE__ . '\frontend_assets');
+/**
+ * enqueue block frontend JS & CSS
+ */
+function frontend_assets () {
+  $frontend_js_path = "/assets/js/blocks.frontend.js";
+
+  wp_enqueue_script(
+	'jsforwp-adv-gb-frontend-js',
+		_get_plugin_url() . $frontend_js_path,
+		[ 'wp-element'],
+		filemtime( _get_plugin_directory() . $frontend_js_path ),
+		true
+  );
+}

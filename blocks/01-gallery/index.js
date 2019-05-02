@@ -4,6 +4,7 @@
 
 import icon from './icon';
 import './style.scss';
+import Gallery from 'react-photo-gallery';
 
 /**
  * Block libraries
@@ -12,7 +13,20 @@ import './style.scss';
 const { __ } = wp.i18n;
 const { Fragment } = wp.element;
 const { registerBlockType } = wp.blocks;
-const { MediaPlaceholder } = wp.editor;
+const {
+	BlockControls,
+	InspectorControls,
+	MediaUpload,
+	MediaPlaceholder
+} = wp.editor;
+const {
+	IconButton,
+	Toolbar,
+	PanelBody,
+	PanelRow,
+	RadioControl,
+	ToggleControl
+} = wp.components;
 
 /**
  * Register Block
@@ -35,11 +49,19 @@ export default registerBlockType('jsforwpadvblocks/gallery', {
 		images: {
 			type: 'array',
 			default: []
+		},
+		direction: {
+			type: 'string',
+			default: 'row'
+		},
+		isLightboxEnabled: {
+			type: 'boolean',
+			default: true
 		}
 	},
 	edit: props => {
 		const {
-			attributes: { images },
+			attributes: { images, direction, isLightboxEnabled },
 			className,
 			setAttributes
 		} = props;
@@ -58,39 +80,84 @@ export default registerBlockType('jsforwpadvblocks/gallery', {
 		};
 		return (
 			<Fragment>
-				{!!!images.length ? (
-					<MediaPlaceholder
-						labels={{
-							title: __('Gallery', 'jsforwpadvblocks'),
-							instructions: __(
-								'Drag images, upload new ones or select files from your library.',
-								'jsforwpadvblocks'
-							)
-						}}
-						icon={icon}
-						accept="images/*"
-						multiple
-						onSelect={onSelectImages}
-					/>
-				) : (
-					images.map(img => (
-						<img
-							src={img.src}
-							alt={img.alt}
-							title={img.caption}
-							data-id={img.id}
-							width={img.width}
-							height={img.height}
-						/>
-					))
+				<InspectorControls>
+					<PanelBody
+						title={__('Gallery Settings', 'jsforwpadvblocks')}
+						initialOpen={true}
+					>
+						<PanelRow>
+							<RadioControl
+								label={__('Grid Style', 'jsforwpadvblocks')}
+								selected={direction}
+								options={[
+									{ label: __('Rows', 'jsforwpadvblocks'), value: 'row' },
+									{ label: __('Columns', 'jsforwpadvblocks'), value: 'column' }
+								]}
+								onChange={direction => setAttributes({ direction })}
+							/>
+						</PanelRow>
+						<PanelRow>
+							<ToggleControl
+								label={__('Enable/Disable Lightbox', 'jsforwpadvblocks')}
+								checked={isLightboxEnabled}
+								onChange={isLightboxEnabled =>
+									setAttributes({ isLightboxEnabled })
+								}
+							/>
+						</PanelRow>
+					</PanelBody>
+				</InspectorControls>
+				{!!images.length && (
+					<BlockControls>
+						<Toolbar>
+							<MediaUpload
+								allowedTypes={['images']}
+								multiple
+								gallery
+								value={images.map(img => img.id)}
+								onSelect={onSelectImages}
+								render={({ open }) => (
+									<IconButton
+										className="components-toolbar__control"
+										label={__('Edit Gallery', 'jsforwpadvblocks')}
+										icon="edit"
+										onClick={open}
+									/>
+								)}
+							/>
+						</Toolbar>
+					</BlockControls>
 				)}
+				<div className={`${className} ${direction}`}>
+					{!!!images.length ? (
+						<MediaPlaceholder
+							labels={{
+								title: __('Gallery', 'jsforwpadvblocks'),
+								instructions: __(
+									'Drag images, upload new ones or select files from your library.',
+									'jsforwpadvblocks'
+								)
+							}}
+							icon={icon}
+							accept="images/*"
+							multiple
+							onSelect={onSelectImages}
+						/>
+					) : (
+						<Gallery photos={images} direction={direction} />
+					)}
+				</div>
 			</Fragment>
 		);
 	},
 	save: props => {
-		const { images } = props.attributes;
+		const { images, direction, isLightboxEnabled } = props.attributes;
 		return (
-			<div>
+			<div
+				className={`${direction}`}
+				data-direction={direction}
+				data-isLightboxEnabled={isLightboxEnabled}
+			>
 				{images.map(img => (
 					<img
 						src={img.src}
