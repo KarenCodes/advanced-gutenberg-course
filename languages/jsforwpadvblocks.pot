@@ -50,3 +50,20 @@ msgstr ""
 #: blocks/01-gallery/index.js:99
 msgid "Enable / disable lightbox"
 msgstr ""
+
+#: blocks/02-data-example/components/SelectDemo.js:12
+#: blocks/02-data-example/components/SubscribeDemo.js:24
+msgid "Block Count"
+msgstr ""
+
+#: blocks/02-data-example/index.js:11
+msgid "Data API Example"
+msgstr ""
+
+#: blocks/02-data-example/index.js:12
+msgid "Demo of select, subscribe, dispatch, withSelect, withDispatch and compose"
+msgstr ""
+
+#: blocks/02-data-example/index.js:31
+msgid "Data Api Block"
+msgstr ""
